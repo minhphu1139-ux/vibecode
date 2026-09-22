@@ -1,0 +1,987 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vẽ Ngôi Sao 5 Cánh - Từng Cánh Hiện Ra</title>
+  <style>
+    :root {
+      --bg-color: #0b0f19;
+      --card-bg: rgba(22, 29, 47, 0.75);
+      --card-border: rgba(255, 255, 255, 0.12);
+      --text-main: #f1f5f9;
+      --text-muted: #94a3b8;
+      --primary: #fbbf24;
+      --primary-glow: rgba(251, 191, 36, 0.6);
+      --secondary: #f59e0b;
+      --star-stroke: #fef08a;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    }
+
+    body {
+      background: radial-gradient(circle at 50% 30%, #1e1b4b 0%, var(--bg-color) 70%);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px 16px;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Background ambient starfield */
+    .starfield {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .main-container {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 680px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 24px;
+    }
+
+    header {
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, #fef08a 0%, #f59e0b 50%, #ea580c 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 8px;
+      letter-spacing: -0.5px;
+    }
+
+    p.subtitle {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+    }
+
+    /* Star Display Stage */
+    .stage {
+      position: relative;
+      width: 440px;
+      height: 440px;
+      max-width: 90vw;
+      max-height: 90vw;
+      background: radial-gradient(circle, rgba(30, 41, 59, 0.6) 0%, rgba(15, 23, 42, 0.8) 100%);
+      border: 1px solid var(--card-border);
+      border-radius: 28px;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), inset 0 1px 1px rgba(255, 255, 255, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    svg#starSvg {
+      width: 100%;
+      height: 100%;
+      filter: drop-shadow(0 0 12px var(--primary-glow));
+    }
+
+    /* Particle Canvas overlay */
+    canvas#particleCanvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+
+    /* SVG Arm Elements */
+    .star-wing {
+      fill: url(#wingGrad);
+      stroke: var(--star-stroke);
+      stroke-width: 3.5;
+      stroke-linejoin: round;
+      stroke-linecap: round;
+      opacity: 0;
+      transform-origin: 250px 250px;
+      transition: opacity 0.3s ease, filter 0.3s ease;
+    }
+
+    .star-wing.drawing {
+      opacity: 1;
+      filter: drop-shadow(0 0 10px var(--primary-glow));
+    }
+
+    .star-wing.active {
+      opacity: 1;
+      filter: drop-shadow(0 0 16px var(--primary));
+    }
+
+    /* Central burst circle */
+    .center-glow {
+      opacity: 0;
+      transform-origin: 250px 250px;
+      transition: opacity 0.8s ease, transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .center-glow.show {
+      opacity: 0.85;
+      transform: scale(1);
+    }
+
+    /* Info Status Badge */
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 18px;
+      border-radius: 9999px;
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid var(--card-border);
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: #fef08a;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+
+    .pulse-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #fbbf24;
+      box-shadow: 0 0 8px #fbbf24;
+      animation: pulse 1.5s infinite ease-in-out;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 0.3; transform: scale(0.8); }
+      50% { opacity: 1; transform: scale(1.3); }
+    }
+
+    /* Control Panel */
+    .controls-card {
+      width: 100%;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      padding: 18px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    }
+
+    .btn-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+      justify-content: center;
+    }
+
+    button.btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 10px 20px;
+      border-radius: 12px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      user-select: none;
+    }
+
+    button.btn-primary {
+      background: linear-gradient(135deg, #f59e0b, #d97706);
+      color: #0b0f19;
+      box-shadow: 0 4px 14px rgba(245, 158, 11, 0.4);
+    }
+
+    button.btn-primary:hover {
+      background: linear-gradient(135deg, #fbbf24, #f59e0b);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(245, 158, 11, 0.6);
+    }
+
+    button.btn-secondary {
+      background: rgba(30, 41, 59, 0.8);
+      color: var(--text-main);
+      border-color: var(--card-border);
+    }
+
+    button.btn-secondary:hover {
+      background: rgba(51, 65, 85, 0.9);
+      border-color: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+    }
+
+    button.btn:active {
+      transform: translateY(0);
+    }
+
+    /* Options grid */
+    .options-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 14px;
+      padding-top: 10px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .option-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .option-group label {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    select {
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid var(--card-border);
+      color: var(--text-main);
+      padding: 8px 12px;
+      border-radius: 10px;
+      font-size: 0.9rem;
+      outline: none;
+      cursor: pointer;
+      transition: border-color 0.2s;
+    }
+
+    select:focus {
+      border-color: var(--primary);
+    }
+
+    .toggle-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      user-select: none;
+    }
+
+    .toggle-row input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      cursor: pointer;
+      accent-color: var(--primary);
+    }
+
+    /* Sound indicator */
+    .sound-badge {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-left: auto;
+    }
+
+    @media (max-width: 500px) {
+      h1 { font-size: 1.5rem; }
+      .stage { width: 320px; height: 320px; }
+      .controls-card { padding: 16px; }
+      .btn { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Ambient twinkling background stars -->
+  <canvas class="starfield" id="starfieldCanvas"></canvas>
+
+  <div class="main-container">
+    <header>
+      <h1>Ngôi Sao 5 Cánh Kỳ Ảo</h1>
+      <p class="subtitle">Hiệu ứng vẽ từng cánh nối tiếp nhau với ánh sáng rực rỡ</p>
+    </header>
+
+    <!-- Star Stage -->
+    <div class="stage">
+      <!-- SVG Star Drawing Canvas -->
+      <svg id="starSvg" viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <!-- Dynamic Star Gradient -->
+          <linearGradient id="wingGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop id="gradStop1" offset="0%" stop-color="#fef08a" />
+            <stop id="gradStop2" offset="50%" stop-color="#fbbf24" />
+            <stop id="gradStop3" offset="100%" stop-color="#d97706" />
+          </linearGradient>
+
+          <!-- Central Ambient Glow -->
+          <radialGradient id="centerGlowGrad" cx="50%" cy="50%" r="50%">
+            <stop id="coreStop1" offset="0%" stop-color="#ffffff" stop-opacity="1" />
+            <stop id="coreStop2" offset="40%" stop-color="#fbbf24" stop-opacity="0.8" />
+            <stop id="coreStop3" offset="100%" stop-color="#fbbf24" stop-opacity="0" />
+          </radialGradient>
+
+          <!-- Glow Filter -->
+          <filter id="softGlow" x="-30%" y="-30%" width="160%" height="160%">
+            <feGaussianBlur stdDeviation="8" result="blur" />
+            <feMerge>
+              <feMergeNode in="blur" />
+              <feMergeNode in="SourceGraphic" />
+            </feMerge>
+          </filter>
+        </defs>
+
+        <!-- Star Wings (5 Cánh độc lập) -->
+        <!-- Cánh 1: Đỉnh trên (Top) -->
+        <path id="wing0" class="star-wing"
+              d="M 250 250 L 211.83 197.47 L 250 80 L 288.17 197.47 Z" />
+
+        <!-- Cánh 2: Trên bên phải (Top-Right) -->
+        <path id="wing1" class="star-wing"
+              d="M 250 250 L 288.17 197.47 L 411.68 197.47 L 311.76 270.07 Z" />
+
+        <!-- Cánh 3: Dưới bên phải (Bottom-Right) -->
+        <path id="wing2" class="star-wing"
+              d="M 250 250 L 311.76 270.07 L 349.92 387.53 L 250 314.93 Z" />
+
+        <!-- Cánh 4: Dưới bên trái (Bottom-Left) -->
+        <path id="wing3" class="star-wing"
+              d="M 250 250 L 250 314.93 L 150.08 387.53 L 188.24 270.07 Z" />
+
+        <!-- Cánh 5: Trên bên trái (Top-Left) -->
+        <path id="wing4" class="star-wing"
+              d="M 250 250 L 188.24 270.07 L 88.32 197.47 L 211.83 197.47 Z" />
+
+        <!-- Outline path for smooth continuous pen drawing mode -->
+        <path id="contourPath"
+              d="M 250 80 L 288.17 197.47 L 411.68 197.47 L 311.76 270.07 L 349.92 387.53 L 250 314.93 L 150.08 387.53 L 188.24 270.07 L 88.32 197.47 L 211.83 197.47 Z"
+              fill="none"
+              stroke="#fef08a"
+              stroke-width="4"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              style="opacity: 0;" />
+
+        <!-- Center Glow Core -->
+        <circle id="centerGlow" class="center-glow" cx="250" cy="250" r="100" fill="url(#centerGlowGrad)" />
+
+        <!-- Drawing Tip Marker (Đầu bút ánh sáng) -->
+        <g id="penTip" style="opacity: 0;">
+          <circle cx="0" cy="0" r="10" fill="#ffffff" filter="url(#softGlow)" />
+          <circle cx="0" cy="0" r="4" fill="#fbbf24" />
+        </g>
+      </svg>
+
+      <!-- Particle Overlay -->
+      <canvas id="particleCanvas"></canvas>
+    </div>
+
+    <!-- Status Badge -->
+    <div class="status-badge" id="statusBadge">
+      <div class="pulse-dot"></div>
+      <span id="statusText">Chuẩn bị vẽ cánh 1...</span>
+    </div>
+
+    <!-- Control Center -->
+    <div class="controls-card">
+      <div class="btn-row">
+        <button class="btn btn-primary" id="btnReplay">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="5 3 19 12 5 21 5 3"></polygon>
+          </svg>
+          <span id="btnPlayText">Vẽ Lại Ngay</span>
+        </button>
+
+        <button class="btn btn-secondary" id="btnTogglePause">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="6" y="4" width="4" height="16"></rect>
+            <rect x="14" y="4" width="4" height="16"></rect>
+          </svg>
+          <span>Tạm dừng</span>
+        </button>
+      </div>
+
+      <div class="options-grid">
+        <!-- Chế độ vẽ -->
+        <div class="option-group">
+          <label for="drawMode">Phong Cách Vẽ</label>
+          <select id="drawMode">
+            <option value="wing-by-wing">1. Vẽ & Hiện Từng Cánh</option>
+            <option value="light-trace">2. Bút Ánh Sáng Chạy Viền</option>
+            <option value="pentagram">3. 5 Nét Đan Chéo Cổ Điển</option>
+          </select>
+        </div>
+
+        <!-- Tông màu -->
+        <div class="option-group">
+          <label for="colorTheme">Màu Sắc Ánh Sao</label>
+          <select id="colorTheme">
+            <option value="gold">🌟 Vàng Kim Hoàng Gia</option>
+            <option value="vietnam">🇻🇳 Cờ Đỏ Sao Vàng</option>
+            <option value="cyberpunk">🔮 Neon Cyberpunk</option>
+            <option value="aurora">🌌 Cực Quang (Aurora)</option>
+            <option value="ruby">💎 Hồng Ngọc (Ruby Fire)</option>
+          </select>
+        </div>
+
+        <!-- Tốc độ -->
+        <div class="option-group">
+          <label for="speedSelect">Tốc Độ Vẽ</label>
+          <select id="speedSelect">
+            <option value="0.6">Chậm Rãi (0.6x)</option>
+            <option value="1" selected>Tiêu Chuẩn (1.0x)</option>
+            <option value="1.6">Nhanh (1.6x)</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="btn-row" style="justify-content: space-between; padding-top: 6px;">
+        <label class="toggle-row">
+          <input type="checkbox" id="chkLoop" checked>
+          <span>Tự động lặp lại khi hoàn thành</span>
+        </label>
+
+        <label class="toggle-row">
+          <input type="checkbox" id="chkAudio" checked>
+          <span>Âm thanh chuông ngân (Web Audio)</span>
+        </label>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ==========================================
+    // 1. DATA & GEOMETRY
+    // ==========================================
+    const WING_NAMES = [
+      "Cánh 1 (Đỉnh Trên)",
+      "Cánh 2 (Bên Phải Trên)",
+      "Cánh 3 (Bên Phải Dưới)",
+      "Cánh 4 (Bên Trái Dưới)",
+      "Cánh 5 (Bên Trái Trên)"
+    ];
+
+    const TIPS = [
+      { x: 250, y: 80 },     // Top
+      { x: 411.68, y: 197.47 }, // Right
+      { x: 349.92, y: 387.53 }, // Bottom Right
+      { x: 150.08, y: 387.53 }, // Bottom Left
+      { x: 88.32, y: 197.47 }   // Left
+    ];
+
+    const THEMES = {
+      gold: {
+        stops: ["#fef08a", "#fbbf24", "#d97706"],
+        stroke: "#fef08a",
+        primary: "#fbbf24",
+        glow: "rgba(251, 191, 36, 0.6)",
+        bgPulse: "#fbbf24"
+      },
+      vietnam: {
+        stops: ["#ffff77", "#ffde00", "#d8a000"],
+        stroke: "#ffffff",
+        primary: "#ffde00",
+        glow: "rgba(218, 37, 29, 0.8)",
+        stageBg: "radial-gradient(circle, #7f1d1d 0%, #450a0a 100%)",
+        bgPulse: "#da251d"
+      },
+      cyberpunk: {
+        stops: ["#a7f3d0", "#06b6d4", "#a855f7"],
+        stroke: "#67e8f9",
+        primary: "#06b6d4",
+        glow: "rgba(6, 182, 212, 0.7)",
+        bgPulse: "#a855f7"
+      },
+      aurora: {
+        stops: ["#6ee7b7", "#3b82f6", "#8b5cf6"],
+        stroke: "#a7f3d0",
+        primary: "#3b82f6",
+        glow: "rgba(59, 130, 246, 0.7)",
+        bgPulse: "#3b82f6"
+      },
+      ruby: {
+        stops: ["#fecdd3", "#f43f5e", "#be123c"],
+        stroke: "#ffe4e6",
+        primary: "#f43f5e",
+        glow: "rgba(244, 63, 94, 0.7)",
+        bgPulse: "#f43f5e"
+      }
+    };
+
+    // DOM Elements
+    const wings = [
+      document.getElementById('wing0'),
+      document.getElementById('wing1'),
+      document.getElementById('wing2'),
+      document.getElementById('wing3'),
+      document.getElementById('wing4')
+    ];
+    const contourPath = document.getElementById('contourPath');
+    const penTip = document.getElementById('penTip');
+    const centerGlow = document.getElementById('centerGlow');
+    const statusText = document.getElementById('statusText');
+    const btnReplay = document.getElementById('btnReplay');
+    const btnTogglePause = document.getElementById('btnTogglePause');
+    const drawModeSelect = document.getElementById('drawMode');
+    const colorThemeSelect = document.getElementById('colorTheme');
+    const speedSelect = document.getElementById('speedSelect');
+    const chkLoop = document.getElementById('chkLoop');
+    const chkAudio = document.getElementById('chkAudio');
+    const stage = document.querySelector('.stage');
+
+    // Canvas Setup
+    const pCanvas = document.getElementById('particleCanvas');
+    const pCtx = pCanvas.getContext('2d');
+    const bgCanvas = document.getElementById('starfieldCanvas');
+    const bgCtx = bgCanvas.getContext('2d');
+
+    // Resize handlers
+    function resizeCanvases() {
+      pCanvas.width = stage.clientWidth;
+      pCanvas.height = stage.clientHeight;
+      bgCanvas.width = window.innerWidth;
+      bgCanvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resizeCanvases);
+    resizeCanvases();
+
+    // ==========================================
+    // 2. SYNTHETIC SOUND CHIMES (Web Audio API)
+    // ==========================================
+    let audioCtx = null;
+    function playChime(noteIndex) {
+      if (!chkAudio.checked) return;
+      try {
+        if (!audioCtx) {
+          audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        }
+        if (audioCtx.state === 'suspended') {
+          audioCtx.resume();
+        }
+        const now = audioCtx.currentTime;
+        // Pentatonic major frequencies (C5, D5, E5, G5, A5, C6)
+        const freqs = [523.25, 587.33, 659.25, 783.99, 880.00, 1046.50];
+        const freq = freqs[noteIndex % freqs.length];
+
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(freq, now);
+
+        gain.gain.setValueAtTime(0.0001, now);
+        gain.gain.exponentialRampToValueAtTime(0.25, now + 0.04);
+        gain.gain.exponentialRampToValueAtTime(0.0001, now + 1.2);
+
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+
+        osc.start(now);
+        osc.stop(now + 1.2);
+      } catch (e) {
+        console.warn("Audio playback not allowed yet", e);
+      }
+    }
+
+    // ==========================================
+    // 3. BACKGROUND STARFIELD TWINKLE
+    // ==========================================
+    const bgStars = Array.from({ length: 65 }, () => ({
+      x: Math.random() * window.innerWidth,
+      y: Math.random() * window.innerHeight,
+      radius: Math.random() * 1.5 + 0.5,
+      alpha: Math.random(),
+      speed: Math.random() * 0.02 + 0.005
+    }));
+
+    function drawStarfield() {
+      bgCtx.clearRect(0, 0, bgCanvas.width, bgCanvas.height);
+      for (const s of bgStars) {
+        s.alpha += s.speed;
+        const opacity = (Math.sin(s.alpha) + 1) / 2;
+        bgCtx.fillStyle = `rgba(255, 255, 255, ${opacity * 0.7})`;
+        bgCtx.beginPath();
+        bgCtx.arc(s.x, s.y, s.radius, 0, Math.PI * 2);
+        bgCtx.fill();
+      }
+      requestAnimationFrame(drawStarfield);
+    }
+    requestAnimationFrame(drawStarfield);
+
+    // ==========================================
+    // 4. PARTICLE BURST ENGINE
+    // ==========================================
+    let particles = [];
+    class Particle {
+      constructor(x, y, color) {
+        this.x = x;
+        this.y = y;
+        const angle = Math.random() * Math.PI * 2;
+        const speed = Math.random() * 3 + 1;
+        this.vx = Math.cos(angle) * speed;
+        this.vy = Math.sin(angle) * speed;
+        this.life = 1;
+        this.decay = Math.random() * 0.02 + 0.015;
+        this.size = Math.random() * 3.5 + 1.5;
+        this.color = color;
+      }
+      update() {
+        this.x += this.vx;
+        this.y += this.vy;
+        this.vy += 0.05; // soft gravity
+        this.life -= this.decay;
+        this.size *= 0.97;
+      }
+      draw(ctx) {
+        if (this.life <= 0) return;
+        ctx.save();
+        ctx.globalAlpha = Math.max(0, this.life);
+        ctx.fillStyle = this.color;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+      }
+    }
+
+    function emitParticlesAtTip(stageX, stageY, color, count = 22) {
+      const scale = pCanvas.width / 500;
+      const px = stageX * scale;
+      const py = stageY * scale;
+      for (let i = 0; i < count; i++) {
+        particles.push(new Particle(px, py, color));
+      }
+    }
+
+    function renderParticles() {
+      pCtx.clearRect(0, 0, pCanvas.width, pCanvas.height);
+      for (let i = particles.length - 1; i >= 0; i--) {
+        const p = particles[i];
+        p.update();
+        p.draw(pCtx);
+        if (p.life <= 0) particles.splice(i, 1);
+      }
+      requestAnimationFrame(renderParticles);
+    }
+    requestAnimationFrame(renderParticles);
+
+    // ==========================================
+    // 5. ANIMATION CONTROLLER
+    // ==========================================
+    let isPaused = false;
+    let animId = null;
+    let currentWingIndex = 0;
+    let progress = 0; // 0 to 1 inside current wing
+    let loopTimeout = null;
+
+    // Reset all wings to hidden state
+    function resetStar() {
+      clearTimeout(loopTimeout);
+      if (animId) cancelAnimationFrame(animId);
+      wings.forEach(w => {
+        w.style.opacity = '0';
+        w.style.strokeDashoffset = '0';
+        w.style.strokeDasharray = 'none';
+        w.classList.remove('drawing', 'active');
+      });
+      contourPath.style.opacity = '0';
+      penTip.style.opacity = '0';
+      centerGlow.classList.remove('show');
+      particles = [];
+      currentWingIndex = 0;
+      progress = 0;
+    }
+
+    // Set SVG Path stroke dash for smooth drawing
+    function setupPathDash(pathEl) {
+      const len = pathEl.getTotalLength();
+      pathEl.style.strokeDasharray = len;
+      pathEl.style.strokeDashoffset = len;
+      return len;
+    }
+
+    // Move pen marker on SVG
+    function movePenTip(x, y) {
+      penTip.style.opacity = '1';
+      penTip.setAttribute('transform', `translate(${x}, ${y})`);
+    }
+
+    // Apply color theme
+    function applyTheme() {
+      const themeKey = colorThemeSelect.value;
+      const theme = THEMES[themeKey] || THEMES.gold;
+
+      document.getElementById('gradStop1').setAttribute('stop-color', theme.stops[0]);
+      document.getElementById('gradStop2').setAttribute('stop-color', theme.stops[1]);
+      document.getElementById('gradStop3').setAttribute('stop-color', theme.stops[2]);
+      document.getElementById('coreStop2').setAttribute('stop-color', theme.primary);
+      document.getElementById('coreStop3').setAttribute('stop-color', theme.primary);
+
+      document.documentElement.style.setProperty('--primary', theme.primary);
+      document.documentElement.style.setProperty('--primary-glow', theme.glow);
+      document.documentElement.style.setProperty('--star-stroke', theme.stroke);
+
+      if (theme.stageBg) {
+        stage.style.background = theme.stageBg;
+      } else {
+        stage.style.background = "radial-gradient(circle, rgba(30, 41, 59, 0.6) 0%, rgba(15, 23, 42, 0.8) 100%)";
+      }
+    }
+    colorThemeSelect.addEventListener('change', applyTheme);
+    applyTheme();
+
+    // ==========================================
+    // MODE 1: VẼ & HIỆN TỪNG CÁNH HOÀN CHỈNH
+    // ==========================================
+    function startWingByWingAnimation() {
+      resetStar();
+      let wingIdx = 0;
+      let pathLen = 0;
+      let currentPath = null;
+      let startTime = null;
+
+      function prepareNextWing() {
+        if (wingIdx >= 5) {
+          // Finished all 5 wings!
+          statusText.textContent = "✨ Hoàn thành ngôi sao 5 cánh!";
+          centerGlow.classList.add('show');
+          playChime(5);
+          emitParticlesAtTip(250, 250, THEMES[colorThemeSelect.value].primary, 60);
+
+          if (chkLoop.checked) {
+            loopTimeout = setTimeout(() => {
+              startAnimation();
+            }, 2500);
+          }
+          return;
+        }
+
+        currentWingIndex = wingIdx;
+        currentPath = wings[wingIdx];
+        currentPath.style.opacity = '1';
+        currentPath.classList.add('drawing');
+        pathLen = setupPathDash(currentPath);
+
+        statusText.textContent = `Đang vẽ: ${WING_NAMES[wingIdx]} (${wingIdx + 1}/5)`;
+        playChime(wingIdx);
+
+        startTime = performance.now();
+        requestAnimationFrame(drawStep);
+      }
+
+      function drawStep(timestamp) {
+        if (isPaused) {
+          requestAnimationFrame(drawStep);
+          return;
+        }
+
+        const speed = parseFloat(speedSelect.value);
+        const duration = 650 / speed; // ms per wing
+        const elapsed = timestamp - startTime;
+        const t = Math.min(elapsed / duration, 1);
+
+        // Smooth cubic easing
+        const eased = t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+
+        const currentOffset = pathLen * (1 - eased);
+        currentPath.style.strokeDashoffset = currentOffset;
+
+        // Position pen tip along the path
+        const point = currentPath.getPointAtLength(pathLen * eased);
+        movePenTip(point.x, point.y);
+
+        if (t < 1) {
+          requestAnimationFrame(drawStep);
+        } else {
+          // Wing completed
+          currentPath.style.strokeDashoffset = 0;
+          currentPath.classList.add('active');
+
+          const tip = TIPS[wingIdx];
+          emitParticlesAtTip(tip.x, tip.y, THEMES[colorThemeSelect.value].primary, 25);
+
+          wingIdx++;
+          setTimeout(prepareNextWing, 120 / speed);
+        }
+      }
+
+      prepareNextWing();
+    }
+
+    // ==========================================
+    // MODE 2: BÚT ÁNH SÁNG CHẠY VIỀN CHU VI
+    // ==========================================
+    function startContourAnimation() {
+      resetStar();
+      contourPath.style.opacity = '1';
+      const totalLen = setupPathDash(contourPath);
+      const segmentLen = totalLen / 5;
+      let startTime = null;
+
+      statusText.textContent = "Bút ánh sáng đang chạy viền 5 cánh...";
+      penTip.style.opacity = '1';
+
+      function step(timestamp) {
+        if (isPaused) {
+          requestAnimationFrame(step);
+          return;
+        }
+
+        if (!startTime) startTime = timestamp;
+        const speed = parseFloat(speedSelect.value);
+        const duration = 3200 / speed;
+        const elapsed = timestamp - startTime;
+        const t = Math.min(elapsed / duration, 1);
+
+        const currentOffset = totalLen * (1 - t);
+        contourPath.style.strokeDashoffset = currentOffset;
+
+        // Pen position
+        const currentLen = totalLen * t;
+        const pt = contourPath.getPointAtLength(currentLen);
+        movePenTip(pt.x, pt.y);
+
+        // Detect which wing is being completed
+        const wingIndex = Math.min(Math.floor(currentLen / segmentLen), 4);
+        statusText.textContent = `Đang vẽ: ${WING_NAMES[wingIndex]} (${wingIndex + 1}/5)`;
+
+        // Fade in wings progressively
+        for (let i = 0; i <= wingIndex; i++) {
+          wings[i].style.opacity = '1';
+        }
+
+        if (t < 1) {
+          requestAnimationFrame(step);
+        } else {
+          penTip.style.opacity = '0';
+          centerGlow.classList.add('show');
+          statusText.textContent = "✨ Hoàn thành viền ngôi sao!";
+          playChime(5);
+          emitParticlesAtTip(250, 250, THEMES[colorThemeSelect.value].primary, 50);
+
+          if (chkLoop.checked) {
+            loopTimeout = setTimeout(() => {
+              startAnimation();
+            }, 2500);
+          }
+        }
+      }
+
+      requestAnimationFrame(step);
+    }
+
+    // ==========================================
+    // MODE 3: 5 NÉT ĐAN CHÉO CỔ ĐIỂN (PENTAGRAM)
+    // ==========================================
+    function startPentagramAnimation() {
+      resetStar();
+      // Points order: 0 -> 2 -> 4 -> 1 -> 3 -> 0
+      const pentagramPts = [
+        TIPS[0], TIPS[2], TIPS[4], TIPS[1], TIPS[3], TIPS[0]
+      ];
+
+      contourPath.setAttribute('d', `M ${pentagramPts[0].x} ${pentagramPts[0].y} ` +
+        pentagramPts.slice(1).map(p => `L ${p.x} ${p.y}`).join(' ')
+      );
+      contourPath.style.opacity = '1';
+      const totalLen = setupPathDash(contourPath);
+      let startTime = null;
+
+      function step(timestamp) {
+        if (isPaused) {
+          requestAnimationFrame(step);
+          return;
+        }
+
+        if (!startTime) startTime = timestamp;
+        const speed = parseFloat(speedSelect.value);
+        const duration = 2800 / speed;
+        const elapsed = timestamp - startTime;
+        const t = Math.min(elapsed / duration, 1);
+
+        contourPath.style.strokeDashoffset = totalLen * (1 - t);
+
+        const pt = contourPath.getPointAtLength(totalLen * t);
+        movePenTip(pt.x, pt.y);
+
+        const strokeIdx = Math.min(Math.floor(t * 5), 4);
+        statusText.textContent = `Nét đan chéo ${strokeIdx + 1}/5`;
+
+        if (t < 1) {
+          requestAnimationFrame(step);
+        } else {
+          // Show full star fill
+          wings.forEach(w => w.style.opacity = '1');
+          centerGlow.classList.add('show');
+          statusText.textContent = "✨ Hoàn thành ngôi sao 5 cánh!";
+          playChime(5);
+          emitParticlesAtTip(250, 250, THEMES[colorThemeSelect.value].primary, 50);
+
+          if (chkLoop.checked) {
+            loopTimeout = setTimeout(() => {
+              startAnimation();
+            }, 2500);
+          }
+        }
+      }
+
+      requestAnimationFrame(step);
+    }
+
+    // Master trigger based on selected mode
+    function startAnimation() {
+      const mode = drawModeSelect.value;
+      if (mode === 'wing-by-wing') {
+        startWingByWingAnimation();
+      } else if (mode === 'light-trace') {
+        startContourAnimation();
+      } else {
+        startPentagramAnimation();
+      }
+    }
+
+    // ==========================================
+    // 6. EVENT LISTENERS
+    // ==========================================
+    btnReplay.addEventListener('click', () => {
+      isPaused = false;
+      btnTogglePause.querySelector('span').textContent = "Tạm dừng";
+      startAnimation();
+    });
+
+    btnTogglePause.addEventListener('click', () => {
+      isPaused = !isPaused;
+      btnTogglePause.querySelector('span').textContent = isPaused ? "Tiếp tục" : "Tạm dừng";
+    });
+
+    drawModeSelect.addEventListener('change', () => {
+      startAnimation();
+    });
+
+    // Start immediately on load
+    window.addEventListener('DOMContentLoaded', () => {
+      setTimeout(startAnimation, 300);
+    });
+  </script>
+</body>
+</html>
