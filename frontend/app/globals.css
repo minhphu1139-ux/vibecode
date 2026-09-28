@@ -1,0 +1,89 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --font-sans: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --brand-orange: #F26B38;
+  --brand-teal: #0B8374;
+  --brand-gray: #CBE5DF;
+}
+
+body {
+  background-color: #051715;
+  color: #CBE5DF;
+  font-family: var(--font-sans);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Glassmorphism Surface */
+.glass-panel {
+  background: rgba(9, 36, 33, 0.78);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(203, 229, 223, 0.15);
+}
+
+.glass-input {
+  background: rgba(6, 26, 24, 0.85);
+  border: 1px solid rgba(203, 229, 223, 0.2);
+  color: #ffffff;
+  transition: all 0.2s ease;
+}
+
+.glass-input:focus {
+  border-color: #0B8374;
+  box-shadow: 0 0 0 3px rgba(11, 131, 116, 0.35);
+  outline: none;
+}
+
+/* Animated subtle background blobs */
+.bg-ambient-glow {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.glow-circle-1 {
+  position: absolute;
+  top: -150px;
+  right: -100px;
+  width: 600px;
+  height: 600px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(11, 131, 116, 0.25) 0%, rgba(11, 131, 116, 0) 70%);
+  filter: blur(50px);
+}
+
+.glow-circle-2 {
+  position: absolute;
+  bottom: -200px;
+  left: -150px;
+  width: 700px;
+  height: 700px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(242, 107, 56, 0.18) 0%, rgba(242, 107, 56, 0) 70%);
+  filter: blur(60px);
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #051715;
+}
+::-webkit-scrollbar-thumb {
+  background: #0B8374;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #F26B38;
+}
