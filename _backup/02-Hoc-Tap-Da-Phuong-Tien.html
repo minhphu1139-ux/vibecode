@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Flow 02: Trải nghiệm học tập</title>
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+        mermaid.initialize({ startOnLoad: true });
+    </script>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; background-color: #f9f9f9; }
+        .container { background-color: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        h2 { color: #333; margin-bottom: 5px; }
+        .desc { color: #666; margin-bottom: 30px; font-style: italic; }
+        .mermaid { display: flex; justify-content: center; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Flow 02: Trải nghiệm học tập</h2>
+        <p class="desc">Sơ đồ luồng trực quan hóa dành cho người không chuyên kỹ thuật (Non-technical).</p>
+        <div class="mermaid">
+graph TD;
+    A[Dashboard] --> B[Chọn Khóa học];
+    B --> C[Vào Bài học];
+    C --> D{Loại nội dung};
+    D -- Video --> E[Xem Video];
+    D -- Text --> F[Đọc tài liệu];
+    D -- Slide --> G[Tương tác Slide];
+    E --> H[Hệ thống lưu tiến độ];
+    F --> H;
+    G --> H;
+    H --> I[Bài tiếp theo];
+        </div>
+    </div>
+</body>
+</html>

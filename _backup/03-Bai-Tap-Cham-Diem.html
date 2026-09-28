@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Flow 03: Bài tập và Chấm điểm</title>
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+        mermaid.initialize({ startOnLoad: true });
+    </script>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; background-color: #f9f9f9; }
+        .container { background-color: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        h2 { color: #333; margin-bottom: 5px; }
+        .desc { color: #666; margin-bottom: 30px; font-style: italic; }
+        .mermaid { display: flex; justify-content: center; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Flow 03: Bài tập và Chấm điểm</h2>
+        <p class="desc">Sơ đồ luồng trực quan hóa dành cho người không chuyên kỹ thuật (Non-technical).</p>
+        <div class="mermaid">
+graph TD;
+    A[Bài học] --> B[Mở Bài tập];
+    B --> C[Làm Trắc nghiệm/Upload file];
+    C --> D[Nộp bài];
+    D --> E{Loại bài};
+    E -- Trắc nghiệm --> F[Chấm tự động];
+    E -- File --> G[Giảng viên chấm];
+    F --> H[Nhận kết quả];
+    G --> H;
+        </div>
+    </div>
+</body>
+</html>

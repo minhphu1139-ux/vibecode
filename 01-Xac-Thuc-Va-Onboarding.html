@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flow 01: Xác thực, Đăng nhập & Onboarding</title>
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+        mermaid.initialize({ 
+            startOnLoad: true, 
+            theme: 'base',
+            themeVariables: {
+                primaryColor: '#e0f2fe',
+                primaryTextColor: '#0369a1',
+                primaryBorderColor: '#38bdf8',
+                lineColor: '#64748b',
+                secondaryColor: '#fef3c7',
+                tertiaryColor: '#f1f5f9'
+            }
+        });
+    </script>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-light: #eff6ff;
+            --success: #16a34a;
+            --warning: #d97706;
+            --danger: #dc2626;
+            --bg: #f8fafc;
+            --card-bg: #ffffff;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg);
+            color: var(--text-main);
+            line-height: 1.6;
+            padding: 24px;
+        }
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+        .nav-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--card-bg);
+            padding: 16px 24px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            margin-bottom: 24px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+        .nav-links a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-left: 16px;
+        }
+        .nav-links a:hover { text-decoration: underline; }
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 9999px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        .badge-primary { background: #dbeafe; color: #1e40af; }
+        .badge-success { background: #dcfce7; color: #166534; }
+        .badge-warning { background: #fef3c7; color: #92400e; }
+        .card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            padding: 28px;
+            margin-bottom: 24px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+        h1 { font-size: 1.75rem; color: #0f172a; margin-bottom: 8px; }
+        h2 { font-size: 1.25rem; color: #334155; margin-bottom: 16px; border-bottom: 2px solid var(--primary-light); padding-bottom: 8px; }
+        .subtitle { color: var(--text-muted); font-size: 0.95rem; margin-bottom: 20px; }
+        .mermaid-container {
+            background: #ffffff;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 24px;
+            overflow-x: auto;
+            text-align: center;
+            margin-top: 16px;
+        }
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        @media (max-width: 768px) {
+            .grid-2 { grid-template-columns: 1fr; }
+        }
+        .step-list { list-style: none; counter-reset: step-counter; }
+        .step-list li {
+            position: relative;
+            padding-left: 36px;
+            margin-bottom: 14px;
+        }
+        .step-list li::before {
+            content: counter(step-counter);
+            counter-increment: step-counter;
+            position: absolute;
+            left: 0;
+            top: 2px;
+            width: 24px;
+            height: 24px;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+        .rule-box {
+            background: #fffbeb;
+            border-left: 4px solid var(--warning);
+            padding: 14px;
+            border-radius: 0 8px 8px 0;
+            margin-top: 12px;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="nav-header">
+            <div>
+                <span class="badge badge-primary">FLOW-01</span>
+                <span style="font-weight: bold; margin-left: 8px;">Xác thực & Onboarding</span>
+            </div>
+            <nav class="nav-links">
+                <a href="index.html">🏠 Cổng điều hướng</a>
+                <a href="02-Kham-Pha-Va-Thanh-Toan.html">Tiếp theo: Flow 02 ➡</a>
+            </nav>
+        </header>
+
+        <main>
+            <section class="card">
+                <h1>Flow 01: Xác thực, Đăng nhập & Onboarding</h1>
+                <p class="subtitle">Đăng nhập đa phương thức (Email, Google, Apple ID), kiểm soát phiên duy nhất (chống chia sẻ tài khoản) và trắc nghiệm phân loại trình độ cá nhân hóa.</p>
+
+                <div class="grid-2">
+                    <div>
+                        <h2>1. Luồng Đăng nhập (Existing User)</h2>
+                        <ul class="step-list">
+                            <li>Truy cập qua Trang chủ hoặc Deep link khóa học.</li>
+                            <li>Đăng nhập qua Email/Mật khẩu hoặc Single Sign-On (Google/Apple).</li>
+                            <li>Hệ thống kiểm tra thông tin và kiểm soát phiên (đăng xuất phiên cũ nếu có).</li>
+                            <li>Điều hướng trực tiếp vào Khóa học (nếu qua link) hoặc Dashboard học viên.</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h2>2. Luồng Đăng ký & Khởi tạo (New User)</h2>
+                        <ul class="step-list">
+                            <li>Điền thông tin tài khoản hoặc kích hoạt qua Google OAuth.</li>
+                            <li>Xác thực Email bằng mã OTP 6 chữ số (hiệu lực 5 phút).</li>
+                            <li>Khảo sát mục tiêu và làm bài trắc nghiệm phân loại (Tùy chọn).</li>
+                            <li>Hệ thống tính điểm, gợi ý lộ trình và dẫn vào Dashboard.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="rule-box">
+                    <strong>Quy tắc nghiệp vụ then chốt:</strong>
+                    Tài khoản áp dụng cơ chế <em>Single Active Session</em>: Khi học viên đăng nhập ở thiết bị mới, thiết bị cũ sẽ tự động bị ngắt kết nối để ngăn chặn tình trạng dùng chung tài khoản xem bài giảng.
+                </div>
+            </section>
+
+            <section class="card">
+                <h2>Sơ đồ luồng trực quan (Mermaid Flowchart)</h2>
+                <div class="mermaid-container">
+                    <pre class="mermaid">
+flowchart TD
+    Start(["Khách truy cập Trang chủ / Deep Link"]) --> ChooseAuth{"Chọn Đăng nhập hay Đăng ký?"}
+    
+    subgraph LoginPath ["Luồng Đăng nhập"]
+        ChooseAuth -- Đăng nhập --> MethodLogin{"Phương thức đăng nhập"}
+        MethodLogin -- Email & Mật khẩu --> SubmitCredentials["Nhập Email & Password"]
+        MethodLogin -- Google / Apple --> OAuthLogin["Xác thực qua OAuth 2.0 Provider"]
+        
+        SubmitCredentials --> CheckPass{"Thông tin hợp lệ?"}
+        CheckPass -- Sai quá 5 lần --> LockAccount["Khóa tạm 15 phút & Gửi Email cảnh báo"]
+        CheckPass -- Quên mật khẩu --> ForgotPass["Gửi OTP đặt lại mật khẩu qua Email"]
+        CheckPass -- Thành công --> CheckSession{"Kiểm tra phiên đăng nhập cũ"}
+        OAuthLogin --> CheckSession
+        
+        CheckSession -- Có phiên khác đang chạy --> RevokeOldSession["Hủy phiên cũ (Chống share tài khoản)"]
+        RevokeOldSession --> IssueToken["Cấp Access Token & Refresh Token mới"]
+        CheckSession -- Không có phiên khác --> IssueToken
+    end
+
+    subgraph RegisterPath ["Luồng Đăng ký & Onboarding"]
+        ChooseAuth -- Đăng ký --> InputRegister["Nhập Họ tên, Email, Mật khẩu"]
+        InputRegister --> SendOTP["Gửi mã OTP 6 số xác thực Email"]
+        SendOTP --> VerifyOTP{"Xác nhận OTP thành công?"}
+        VerifyOTP -- Sai / Hết hạn --> ResendOTP["Gửi lại OTP mới"]
+        ResendOTP --> VerifyOTP
+        VerifyOTP -- Thành công --> SurveyStep["Khảo sát mục tiêu & sở thích học tập"]
+        
+        SurveyStep --> TestChoice{"Có làm bài test phân loại?"}
+        TestChoice -- Có --> DoQuiz["Làm bài Test nhanh 10-15 phút"]
+        DoQuiz --> CalcLevel["Hệ thống chấm & Xác định Level (Sơ cấp/Trung cấp)"]
+        TestChoice -- Bỏ qua --> DefaultLevel["Gán Level mặc định (Beginner)"]
+        
+        CalcLevel --> RecommendPath["Gợi ý lộ trình & Khóa học phù hợp"]
+        DefaultLevel --> RecommendPath
+        RecommendPath --> IssueToken
+    end
+
+    IssueToken --> RedirectTarget{"Có Deep Link trước đó?"}
+    RedirectTarget -- Có --> GoCourse["Chuyển hướng đến Khóa học cụ thể"]
+    RedirectTarget -- Không --> GoDashboard["Chuyển hướng vào Dashboard Học viên"]
+                    </pre>
+                </div>
+            </section>
+        </main>
+    </div>
+</body>
+</html>

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Flow 04: Tham gia Live Session & Cấp Chứng Chỉ</title>
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+        mermaid.initialize({ startOnLoad: true, theme: 'default' });
+    </script>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 40px; background-color: #f4f7f6; line-height: 1.6; color: #333; }
+        .container { background-color: #fff; padding: 40px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); max-width: 900px; margin: auto; border-top: 5px solid #2563eb; }
+        h2 { color: #1e3a8a; margin-top: 0; font-size: 24px; }
+        .desc { color: #64748b; margin-bottom: 30px; font-style: italic; }
+        .mermaid-container { display: flex; justify-content: center; margin-bottom: 40px; padding: 20px; background: #ffffff; border-radius: 8px; border: 1px solid #e2e8f0; box-shadow: inset 0 2px 4px rgba(0,0,0,0.02); overflow-x: auto; }
+        .details { padding: 25px; background: #eff6ff; border-left: 5px solid #3b82f6; border-radius: 6px; }
+        .details h3 { margin-top: 0; color: #1e40af; font-size: 18px; }
+        .details ul, .details ol { margin-bottom: 0; padding-left: 20px; }
+        .details li { margin-bottom: 10px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Flow 04: Tham gia Live Session & Cấp Chứng Chỉ</h2>
+        <p class="desc">Sơ đồ luồng trực quan (Dành cho Non-technical team)</p>
+        
+        <div class="mermaid-container">
+            <div class="mermaid">
+graph TD;
+    A[Nhận thông báo Lịch học Live] --> B[Bấm Tham gia trên Dashboard];
+    B --> C[Mở phòng học ảo Zoom/Meet trên Web];
+    C --> D[Hoàn thành toàn bộ lộ trình khóa học];
+    D --> E[Làm bài kiểm tra cuối khóa];
+    E --> F{Đạt điều kiện?};
+    F -- Có --> G[Hệ thống tự động cấp Chứng chỉ PDF];
+    G --> H[Tạo mã QR xác thực chứng chỉ];
+    H --> I[Học viên tải về hoặc chia sẻ];
+    F -- Không --> J[Yêu cầu học/thi lại];
+            </div>
+        </div>
+        
+        <div class="details">
+<h3>Flow 04: Tham gia Live Session & Cấp Chứng Chỉ</h3><p>1. Học viên nhận thông báo và tham gia lớp học trực tuyến (Live Session) qua Zoom/Meet ngay trên hệ thống.</p><p>2. Học viên hoàn thành tất cả các bài học và tiến hành làm bài thi cuối khóa.</p><p>3. Hệ thống kiểm tra điều kiện hoàn thành.</p><p>4. Nếu đạt, tự động sinh chứng chỉ dạng PDF kèm mã QR xác thực.</p><p>5. Học viên có thể tải chứng chỉ về hoặc chia sẻ.</p>
+        </div>
+    </div>
+</body>
+</html>

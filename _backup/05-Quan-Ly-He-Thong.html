@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Flow 05: Quản lý hệ thống (Admin / Giảng viên)</title>
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+        mermaid.initialize({ startOnLoad: true });
+    </script>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; background-color: #f9f9f9; line-height: 1.6; }
+        .container { background-color: #fff; padding: 30px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); max-width: 900px; margin: auto; }
+        h2 { color: #1e3a8a; margin-bottom: 5px; }
+        .desc { color: #64748b; margin-bottom: 30px; font-style: italic; }
+        .mermaid { display: flex; justify-content: center; margin-bottom: 30px; padding: 20px; background: #f8fafc; border-radius: 8px; border: 1px solid #e2e8f0; }
+        .details { padding: 20px; background: #eff6ff; border-left: 4px solid #3b82f6; border-radius: 4px; }
+        .details h3 { margin-top: 0; color: #1e40af; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Flow 05: Quản lý hệ thống (Admin / Giảng viên)</h2>
+        <p class="desc">Sơ đồ luồng trực quan hóa dành cho người không chuyên kỹ thuật (Non-technical).</p>
+        <div class="mermaid">
+graph TD;
+    A[Đăng nhập Admin/Instructor] --> B[Quản lý nội dung];
+    B --> C[Tạo Khóa học / Upload Video, SCORM];
+    B --> D[Lên lịch Live Session];
+    A --> E[Tương tác & Chấm điểm];
+    E --> F[Chấm bài thủ công & Hỗ trợ hỏi đáp];
+    A --> G[Quản lý vận hành];
+    G --> H[Theo dõi tỷ lệ hoàn thành];
+    G --> I[Quản lý Chứng chỉ & Báo cáo doanh thu];
+        </div>
+        <div class="details">
+<h3>Flow 05: Quản lý hệ thống (Admin / Giảng viên)</h3><p>1. Giảng viên/Admin truy cập khu vực Quản trị.</p><p>2. Tạo khóa học, upload đa dạng định dạng (Video, Text, SCORM) và lên lịch bài kiểm tra, Live Session.</p><p>3. Quản lý tương tác: Chấm điểm bài nộp thủ công và giải đáp thắc mắc.</p><p>4. Quản lý tổng thể: Xem báo cáo doanh thu, tiến độ học viên, thu hồi/cấp phát chứng chỉ.</p>
+        </div>
+    </div>
+</body>
+</html>

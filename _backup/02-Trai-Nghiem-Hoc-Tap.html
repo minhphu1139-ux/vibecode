@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Flow 02: Trải nghiệm Học tập (Video, Text, Slide)</title>
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+        mermaid.initialize({ startOnLoad: true, theme: 'default' });
+    </script>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 40px; background-color: #f4f7f6; line-height: 1.6; color: #333; }
+        .container { background-color: #fff; padding: 40px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); max-width: 900px; margin: auto; border-top: 5px solid #2563eb; }
+        h2 { color: #1e3a8a; margin-top: 0; font-size: 24px; }
+        .desc { color: #64748b; margin-bottom: 30px; font-style: italic; }
+        .mermaid-container { display: flex; justify-content: center; margin-bottom: 40px; padding: 20px; background: #ffffff; border-radius: 8px; border: 1px solid #e2e8f0; box-shadow: inset 0 2px 4px rgba(0,0,0,0.02); overflow-x: auto; }
+        .details { padding: 25px; background: #eff6ff; border-left: 5px solid #3b82f6; border-radius: 6px; }
+        .details h3 { margin-top: 0; color: #1e40af; font-size: 18px; }
+        .details ul, .details ol { margin-bottom: 0; padding-left: 20px; }
+        .details li { margin-bottom: 10px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Flow 02: Trải nghiệm Học tập (Video, Text, Slide)</h2>
+        <p class="desc">Sơ đồ luồng trực quan (Dành cho Non-technical team)</p>
+        
+        <div class="mermaid-container">
+            <div class="mermaid">
+graph TD;
+    A[Dashboard] --> B[Chọn khóa học];
+    B --> C[Vào bài học];
+    C --> D{Loại nội dung?};
+    D -- Video --> E[Xem Video HD/4K];
+    D -- Văn bản --> F[Đọc tài liệu PDF/Text];
+    D -- Tương tác --> G[Xem slide SCORM];
+    E --> H[Hệ thống lưu vết vị trí - Bookmarking];
+    F --> H;
+    G --> H;
+    H --> I[Cập nhật % Tiến độ];
+    I --> J[Mở khóa bài tiếp theo];
+            </div>
+        </div>
+        
+        <div class="details">
+<h3>Flow 02: Trải nghiệm Học tập đa phương tiện</h3><p>1. Học viên vào Dashboard và chọn Khóa học.</p><p>2. Truy cập vào từng bài học cụ thể.</p><p>3. Học viên tương tác với bài học tùy theo định dạng (Xem Video, Đọc PDF, Tương tác Slide SCORM).</p><p>4. Hệ thống tự động ghi nhớ vị trí học (Bookmarking) và cập nhật thanh tiến độ %.</p><p>5. Kiểm tra điều kiện và mở khóa nội dung bài học tiếp theo.</p>
+        </div>
+    </div>
+</body>
+</html>

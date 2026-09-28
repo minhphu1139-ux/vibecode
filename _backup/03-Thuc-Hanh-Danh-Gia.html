@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Flow 03: Thực hành & Đánh giá</title>
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+        mermaid.initialize({ startOnLoad: true });
+    </script>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; background-color: #f9f9f9; line-height: 1.6; }
+        .container { background-color: #fff; padding: 30px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); max-width: 900px; margin: auto; }
+        h2 { color: #1e3a8a; margin-bottom: 5px; }
+        .desc { color: #64748b; margin-bottom: 30px; font-style: italic; }
+        .mermaid { display: flex; justify-content: center; margin-bottom: 30px; padding: 20px; background: #f8fafc; border-radius: 8px; border: 1px solid #e2e8f0; }
+        .details { padding: 20px; background: #eff6ff; border-left: 4px solid #3b82f6; border-radius: 4px; }
+        .details h3 { margin-top: 0; color: #1e40af; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Flow 03: Thực hành & Đánh giá</h2>
+        <p class="desc">Sơ đồ luồng trực quan hóa dành cho người không chuyên kỹ thuật (Non-technical).</p>
+        <div class="mermaid">
+graph TD;
+    A[Mở phần Bài tập] --> B{Loại Bài tập};
+    B -- Trắc nghiệm --> C[Làm Quizz trực tuyến];
+    B -- Tự luận/Thực hành --> D[Upload file bài làm];
+    C --> E[Hệ thống tự động chấm điểm];
+    D --> F[Giảng viên tải về chấm thủ công];
+    F --> G[Giảng viên để lại Feedback];
+    E --> H[Cập nhật Điểm số & Nhận xét];
+    G --> H;
+    H --> I{Đạt điểm tối thiểu?};
+    I -- Có --> J[Mở khóa nội dung tiếp theo];
+    I -- Không --> K[Yêu cầu làm lại];
+        </div>
+        <div class="details">
+<h3>Flow 03: Thực hành & Đánh giá</h3><p>1. Học viên mở bài tập thực hành.</p><p>2. Đối với trắc nghiệm (Quizz): Làm trực tiếp, hệ thống xáo trộn câu và tự động chấm điểm.</p><p>3. Đối với bài Assignment: Học viên tải file lên (Word/Excel...). Giảng viên chấm thủ công và nhận xét.</p><p>4. Nếu đạt điểm tối thiểu, hệ thống cho phép học viên học tiếp. Nếu không, yêu cầu làm lại.</p>
+        </div>
+    </div>
+</body>
+</html>

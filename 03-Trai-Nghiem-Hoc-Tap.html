@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flow 03: Trải nghiệm học tập đa phương tiện</title>
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+        mermaid.initialize({ 
+            startOnLoad: true, 
+            theme: 'base',
+            themeVariables: {
+                primaryColor: '#e0f2fe',
+                primaryTextColor: '#0369a1',
+                primaryBorderColor: '#38bdf8',
+                lineColor: '#64748b',
+                secondaryColor: '#fef3c7',
+                tertiaryColor: '#f1f5f9'
+            }
+        });
+    </script>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-light: #eff6ff;
+            --success: #16a34a;
+            --warning: #d97706;
+            --bg: #f8fafc;
+            --card-bg: #ffffff;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg);
+            color: var(--text-main);
+            line-height: 1.6;
+            padding: 24px;
+        }
+        .container { max-width: 1100px; margin: 0 auto; }
+        .nav-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--card-bg);
+            padding: 16px 24px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            margin-bottom: 24px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+        .nav-links a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-left: 16px;
+        }
+        .nav-links a:hover { text-decoration: underline; }
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 9999px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        .badge-primary { background: #dbeafe; color: #1e40af; }
+        .card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            padding: 28px;
+            margin-bottom: 24px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+        h1 { font-size: 1.75rem; color: #0f172a; margin-bottom: 8px; }
+        h2 { font-size: 1.25rem; color: #334155; margin-bottom: 16px; border-bottom: 2px solid var(--primary-light); padding-bottom: 8px; }
+        .subtitle { color: var(--text-muted); font-size: 0.95rem; margin-bottom: 20px; }
+        .mermaid-container {
+            background: #ffffff;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 24px;
+            overflow-x: auto;
+            text-align: center;
+            margin-top: 16px;
+        }
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+        }
+        @media (max-width: 850px) { .grid-3 { grid-template-columns: 1fr; } }
+        .feature-box {
+            background: #f8fafc;
+            border: 1px solid var(--border);
+            padding: 18px;
+            border-radius: 8px;
+        }
+        .feature-box h3 { font-size: 1.05rem; margin-bottom: 8px; color: var(--primary); }
+        .rule-box {
+            background: #fefce8;
+            border-left: 4px solid var(--warning);
+            padding: 14px;
+            border-radius: 0 8px 8px 0;
+            margin-top: 16px;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="nav-header">
+            <div>
+                <span class="badge badge-primary">FLOW-03</span>
+                <span style="font-weight: bold; margin-left: 8px;">Trải nghiệm Học tập đa phương tiện</span>
+            </div>
+            <nav class="nav-links">
+                <a href="02-Kham-Pha-Va-Thanh-Toan.html">⬅ Flow 02</a>
+                <a href="index.html">🏠 Cổng điều hướng</a>
+                <a href="04-Hoi-Dap-Va-Tuong-Tac.html">Tiếp theo: Flow 04 ➡</a>
+            </nav>
+        </header>
+
+        <main>
+            <section class="card">
+                <h1>Flow 03: Học tập Đa phương tiện & Lưu vết Tiến độ</h1>
+                <p class="subtitle">Phát video thích ứng HLS chống vi phạm bản quyền (Dynamic Watermark), đọc PDF tích hợp, tương tác gói SCORM và đồng bộ vị trí xem (Heartbeat bookmarking).</p>
+
+                <div class="grid-3">
+                    <div class="feature-box">
+                        <h3>🎬 Video HD/4K (HLS)</h3>
+                        <p style="font-size: 0.9rem;">Tự động co giãn chất lượng theo mạng. Dynamic Watermark in mờ thông tin học viên để chống quay lén. Điều kiện hoàn thành xem &ge; 80% thời lượng.</p>
+                    </div>
+                    <div class="feature-box">
+                        <h3>📄 Tài liệu Văn bản / PDF</h3>
+                        <p style="font-size: 0.9rem;">Trình đọc PDF nhúng an toàn, tắt chức năng tải về đối với tài liệu mật. Tính hoàn thành khi học viên cuộn hết trang và xác nhận.</p>
+                    </div>
+                    <div class="feature-box">
+                        <h3>🧩 Slide tương tác SCORM</h3>
+                        <p style="font-size: 0.9rem;">Nhúng SCORM 1.2 / 2004 độc lập qua iframe. Giao tiếp hai chiều với LMS API để nhận kết quả bài tập tương tác trong slide.</p>
+                    </div>
+                </div>
+
+                <div class="rule-box">
+                    <strong>Đồng bộ Heartbeat & Mở khóa:</strong>
+                    Trình phát gửi tín hiệu lưu vị trí mỗi 10 giây. Khi bài học hiện tại hoàn thành, hệ thống tự động mở khóa bài tiếp theo trên thanh lộ trình và đề xuất chuyển bài tự động.
+                </div>
+            </section>
+
+            <section class="card">
+                <h2>Sơ đồ luồng trực quan (Mermaid Flowchart)</h2>
+                <div class="mermaid-container">
+                    <pre class="mermaid">
+flowchart TD
+    SelectLesson["Chọn bài học từ Dashboard / Danh sách chương"] --> CheckLock{"Bài học có bị khóa?"}
+    
+    CheckLock -- Bị khóa --> ShowLockReason["Hiển thị lý do: Chưa hoàn thành bài trước"]
+    CheckLock -- Đã mở --> LoadPlayer["Mở giao diện Course Player chuyên dụng"]
+    
+    LoadPlayer --> DetectFormat{"Định dạng bài học?"}
+    
+    subgraph VideoHandling ["Nội dung Video HLS"]
+        DetectFormat -- Video --> FetchSignedURL["Xin cấp Signed URL từ Video CDN (Hạn 10p)"]
+        FetchSignedURL --> RenderWatermark["Bật Dynamic Watermark: In mờ Email/SĐT trôi nổi"]
+        RenderWatermark --> PlayVideo["Phát video thích ứng (Adaptive Bitrate 720p/1080p)"]
+        PlayVideo --> CheckSeek{"Học viên tua nhanh video?"}
+        CheckSeek -- Bật cấm tua & Tua qua đoạn mới --> BlockSeek["Ngăn tua và giữ vị trí xem thực tế"]
+        CheckSeek -- Bình thường --> SendHeartbeat["Gửi Heartbeat mỗi 10 giây lưu vị trí Bookmarking"]
+        BlockSeek --> SendHeartbeat
+        SendHeartbeat --> CheckWatchTime{"Thời lượng xem tích lũy >= 80%?"}
+        CheckWatchTime -- Đạt --> MarkCompleted["Đánh dấu bài học: HOÀN THÀNH"]
+    end
+    
+    subgraph DocHandling ["Nội dung Văn bản / PDF"]
+        DetectFormat -- PDF / Text --> LoadReader["Mở trình đọc PDF nhúng (Ẩn nút Download nếu cấm)"]
+        LoadReader --> ScrollToEnd["Học viên đọc & Cuộn xuống cuối trang"]
+        ScrollToEnd --> ClickConfirm["Bấm nút: 'Tôi đã đọc xong'"]
+        ClickConfirm --> MarkCompleted
+    end
+
+    subgraph ScormHandling ["Nội dung SCORM Tương tác"]
+        DetectFormat -- SCORM --> InitSCORM["Khởi tạo SCORM API (LMSInitialize)"]
+        InitSCORM --> InteractSCORM["Học viên tương tác với các slide tương tác"]
+        InteractSCORM --> FireCompleted["SCORM bắn tín hiệu hoàn thành (cmi.core.lesson_status)"]
+        FireCompleted --> MarkCompleted
+    end
+    
+    MarkCompleted --> UpdateProgressBar["Cập nhật tăng % trên thanh Tiến độ Khóa học"]
+    UpdateProgressBar --> UnlockNext["Tự động mở khóa bài học kế tiếp"]
+    UnlockNext --> AutoNextPrompt["Đếm ngược 5 giây tự động chuyển sang bài tiếp theo"]
+                    </pre>
+                </div>
+            </section>
+        </main>
+    </div>
+</body>
+</html>

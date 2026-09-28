@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Flow 05: Quản trị hệ thống (Giảng viên / Admin)</title>
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+        mermaid.initialize({ startOnLoad: true, theme: 'default' });
+    </script>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 40px; background-color: #f4f7f6; line-height: 1.6; color: #333; }
+        .container { background-color: #fff; padding: 40px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); max-width: 900px; margin: auto; border-top: 5px solid #2563eb; }
+        h2 { color: #1e3a8a; margin-top: 0; font-size: 24px; }
+        .desc { color: #64748b; margin-bottom: 30px; font-style: italic; }
+        .mermaid-container { display: flex; justify-content: center; margin-bottom: 40px; padding: 20px; background: #ffffff; border-radius: 8px; border: 1px solid #e2e8f0; box-shadow: inset 0 2px 4px rgba(0,0,0,0.02); overflow-x: auto; }
+        .details { padding: 25px; background: #eff6ff; border-left: 5px solid #3b82f6; border-radius: 6px; }
+        .details h3 { margin-top: 0; color: #1e40af; font-size: 18px; }
+        .details ul, .details ol { margin-bottom: 0; padding-left: 20px; }
+        .details li { margin-bottom: 10px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Flow 05: Quản trị hệ thống (Giảng viên / Admin)</h2>
+        <p class="desc">Sơ đồ luồng trực quan (Dành cho Non-technical team)</p>
+        
+        <div class="mermaid-container">
+            <div class="mermaid">
+graph TD;
+    A[Đăng nhập tài khoản Quản trị] --> B[Quản lý Khóa học];
+    B --> C[Tải lên Video, Tài liệu, bài giảng SCORM];
+    B --> D[Tạo Bài kiểm tra & Lên lịch Live Session];
+    A --> E[Quản lý Học viên];
+    E --> F[Chấm điểm bài tập & Trả lời thắc mắc];
+    E --> G[Theo dõi tiến độ học tập của từng người];
+    A --> H[Quản lý Kinh doanh];
+    H --> I[Xem báo cáo doanh thu & Chứng chỉ đã cấp];
+            </div>
+        </div>
+        
+        <div class="details">
+<h3>Flow 05: Quản trị hệ thống (Giảng viên / Admin)</h3><p>1. Giảng viên / Admin đăng nhập vào trang quản trị.</p><p>2. **Quản lý Khóa học:** Tạo mới khóa học, upload video, tài liệu, tạo bài trắc nghiệm và lên lịch cho các buổi Live Session.</p><p>3. **Quản lý Học viên:** Theo dõi tiến độ (% hoàn thành) của học viên, chấm điểm các bài tập nộp file và hỗ trợ trả lời thắc mắc.</p><p>4. **Quản lý Kinh doanh:** Xem báo cáo doanh thu khóa học, quản lý danh sách chứng chỉ đã cấp phát hoặc thu hồi.</p>
+        </div>
+    </div>
+</body>
+</html>

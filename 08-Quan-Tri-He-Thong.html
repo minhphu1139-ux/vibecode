@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flow 08: Quản trị Hệ thống & Giảng viên</title>
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+        mermaid.initialize({ 
+            startOnLoad: true, 
+            theme: 'base',
+            themeVariables: {
+                primaryColor: '#e0f2fe',
+                primaryTextColor: '#0369a1',
+                primaryBorderColor: '#38bdf8',
+                lineColor: '#64748b',
+                secondaryColor: '#fef3c7',
+                tertiaryColor: '#f1f5f9'
+            }
+        });
+    </script>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-light: #eff6ff;
+            --success: #16a34a;
+            --warning: #d97706;
+            --danger: #dc2626;
+            --bg: #f8fafc;
+            --card-bg: #ffffff;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg);
+            color: var(--text-main);
+            line-height: 1.6;
+            padding: 24px;
+        }
+        .container { max-width: 1100px; margin: 0 auto; }
+        .nav-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--card-bg);
+            padding: 16px 24px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            margin-bottom: 24px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+        .nav-links a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-left: 16px;
+        }
+        .nav-links a:hover { text-decoration: underline; }
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 9999px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        .badge-primary { background: #dbeafe; color: #1e40af; }
+        .card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            padding: 28px;
+            margin-bottom: 24px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+        h1 { font-size: 1.75rem; color: #0f172a; margin-bottom: 8px; }
+        h2 { font-size: 1.25rem; color: #334155; margin-bottom: 16px; border-bottom: 2px solid var(--primary-light); padding-bottom: 8px; }
+        .subtitle { color: var(--text-muted); font-size: 0.95rem; margin-bottom: 20px; }
+        .mermaid-container {
+            background: #ffffff;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 24px;
+            overflow-x: auto;
+            text-align: center;
+            margin-top: 16px;
+        }
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+        }
+        @media (max-width: 850px) { .grid-3 { grid-template-columns: 1fr; } }
+        .role-card {
+            background: #f8fafc;
+            border: 1px solid var(--border);
+            padding: 18px;
+            border-radius: 8px;
+        }
+        .role-card h3 { font-size: 1.05rem; margin-bottom: 8px; color: var(--primary); }
+        .rule-box {
+            background: #eff6ff;
+            border-left: 4px solid var(--primary);
+            padding: 14px;
+            border-radius: 0 8px 8px 0;
+            margin-top: 16px;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="nav-header">
+            <div>
+                <span class="badge badge-primary">FLOW-08</span>
+                <span style="font-weight: bold; margin-left: 8px;">Quản trị & Giảng viên</span>
+            </div>
+            <nav class="nav-links">
+                <a href="07-Cap-Phat-Chung-Chi.html">⬅ Flow 07</a>
+                <a href="index.html">🏠 Cổng điều hướng</a>
+            </nav>
+        </header>
+
+        <main>
+            <section class="card">
+                <h1>Flow 08: Quản trị Hệ thống & Không gian Giảng viên</h1>
+                <p class="subtitle">Phân quyền vai trò (RBAC), kiểm duyệt xuất bản khóa học, hàng đợi chấm bài cho Giảng viên/Trợ giảng và báo cáo phân tích tỷ lệ rơi rụng (Drop-off Rate) - tài chính.</p>
+
+                <div class="grid-3">
+                    <div class="role-card">
+                        <h3>👑 Super Admin</h3>
+                        <p style="font-size: 0.9rem;">Toàn quyền cấu hình cổng thanh toán, duyệt xuất bản khóa học, quản lý đối soát chia sẻ doanh thu và thẩm quyền thu hồi chứng chỉ vi phạm.</p>
+                    </div>
+                    <div class="role-card">
+                        <h3>👨‍🏫 Giảng viên (Instructor)</h3>
+                        <p style="font-size: 0.9rem;">Studio biên soạn bài giảng (Video/PDF/SCORM), tạo đề thi, lên lịch Live, xem báo cáo doanh thu cá nhân và phân tích tỷ lệ bỏ dở bài học.</p>
+                    </div>
+                    <div class="role-card">
+                        <h3>🎓 Trợ giảng (TA)</h3>
+                        <p style="font-size: 0.9rem;">Hàng đợi chấm bài tập trung theo tiêu chí Rubric (Grading Queue), phản hồi giải đáp thắc mắc của học viên tại từng bài giảng.</p>
+                    </div>
+                </div>
+
+                <div class="rule-box">
+                    <strong>Vòng đời khóa học chuyên nghiệp:</strong>
+                    Khóa học trải qua 4 trạng thái: Bản nháp (Draft) &rarr; Gửi duyệt (Pending Review) &rarr; Xuất bản công khai (Published) &rarr; Lưu trữ (Archived) đảm bảo chất lượng nội dung trước khi ra thị trường.
+                </div>
+            </section>
+
+            <section class="card">
+                <h2>Sơ đồ luồng trực quan (Mermaid Flowchart)</h2>
+                <div class="mermaid-container">
+                    <pre class="mermaid">
+flowchart TD
+    LoginAdmin["Đăng nhập Cổng Quản trị (Admin Portal + 2FA)"] --> CheckRole{"Kiểm tra Vai trò (RBAC)"}
+    
+    subgraph InstructorRole ["Quy trình Giảng viên (Instructor Workspace)"]
+        CheckRole -- Giảng viên --> CourseStudio["Studio Khóa học"]
+        CourseStudio --> BuildCurriculum["Tạo Chương, Bài học & Tải video/PDF/SCORM"]
+        BuildCurriculum --> TranscodeVideo["Server tự động nén & Mã hóa HLS Video"]
+        TranscodeVideo --> SetupQuiz["Tạo Ngân hàng Đề thi & Bảng tiêu chí Rubric"]
+        SetupQuiz --> SubmitReview["Gửi Admin yêu cầu Phê duyệt Khóa học"]
+        
+        CourseStudio --> ViewMyAnalytics["Xem Báo cáo: Tỷ lệ Drop-off & Doanh thu cá nhân"]
+    end
+
+    subgraph AdminRole ["Quy trình Quản trị viên (Super Admin Portal)"]
+        CheckRole -- Super Admin --> ReviewQueue["Hàng đợi Phê duyệt Khóa học"]
+        SubmitReview --> ReviewQueue
+        
+        ReviewQueue --> InspectQuality{"Kiểm tra nội dung & Tiêu chuẩn?"}
+        InspectQuality -- Chưa đạt --> RejectWithFeedback["Từ chối & Gửi góp ý yêu cầu sửa"]
+        RejectWithFeedback --> CourseStudio
+        InspectQuality -- Đạt chuẩn --> PublishCourse["XUẤT BẢN KHÓA HỌC (PUBLISHED)"]
+        
+        PublishCourse --> LiveStore["Khóa học hiển thị công khai trên Sàn"]
+        
+        CheckRole -- Super Admin --> SystemFinance["Báo cáo Doanh thu toàn sàn & Đối soát Giảng viên"]
+        CheckRole -- Super Admin --> CertManagement["Quản lý Danh sách & Thu hồi Chứng chỉ gian lận"]
+    end
+    
+    subgraph TARole ["Quy trình Trợ giảng (TA / Grader Hub)"]
+        CheckRole -- Trợ giảng / Giảng viên --> OpenGradingQueue["Mở Hàng đợi Chấm bài (Grading Queue)"]
+        OpenGradingQueue --> FilterAssignments["Lọc bài nộp chờ chấm theo SLA 48h"]
+        FilterAssignments --> GradeRubric["Chấm điểm theo Rubric & Viết Feedback"]
+        GradeRubric --> PushGrades["Bắn điểm & Nhận xét về cho Học viên"]
+        
+        CheckRole -- Trợ giảng --> QnACenter["Trung tâm Hỏi đáp: Giải đáp thắc mắc bài học"]
+    end
+                    </pre>
+                </div>
+            </section>
+        </main>
+    </div>
+</body>
+</html>
